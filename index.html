@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Pasiruošimo kontroliniam darbui praktinė užduotis</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">   
+    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> OLDER-->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"> 
+    <!--^ NAUDOJAMAS VIETOJE Glyphicons: Bootstrap 4 is a major rewrite of the entire project. It dropped the Glyphicons icon font. -->
+        <link rel="stylesheet" type="text/css" href="styles.css"/>
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> OLDER-->
+    <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> OLDER-->
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery-validation@1.17.0/dist/jquery.validate.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                    $.get("http://api.openweathermap.org/data/2.5/weather?lat=54.6892&lon=25.2798&units=metric&APPID=ce031dda15929a9e5ecc796dba69c161", function (data, textStatus, jqXHR) {
+                        //API kviečiamas pagal miesto koordinates (Vilnius - lat=54.6892 ir lon=25.279), nurodoma, kad temperatūra būtų pateikta celcijais (units=metric). 
+                        console.log(data); //išvedame visą serverio atsakymą į konsolę, kad matytume, kokie parametrai pateikiami.
+                        $("#temperature").prepend(data.main.temp);
+                    });
+                
+                    $("#slide").click(function(){
+                        $("#form").slideToggle("slow");
+                    });
+                    
+                    $("#log_in").click(function(){
+                        $("html, body").animate({
+                            scrollTop: $("#slide").offset().top
+                        }, 2000);
+                        $("#form").slideDown("slow");
+                    });
+                
+                    // Patikrinama ar formos laukai užpildyti teisingai (atliekamas validavimas):
+                    $("form[name='log_in_form']").validate({
+                        rules: {
+                              firstname: "required",
+                              email: {
+                                required: true,
+                                // Lauko užpildymas tikrinamas pagal jau aprašytą taisyklę (built-in "email" rule). 
+                                email: true
+                              },
+                              password: {
+                                required: true,
+                                minlength: 10
+                              }
+                        },
+                        // klaidų pranešimai, kai duomenys netinkamai įvesti: 
+                        messages: {
+                              firstname: "Prašome įvesti vardą.",
+                              email: "Prašome įvesti realų pašto adresą.",
+                              password: {
+                                required: "Prašome įvesti slaptažodį.",
+                                minlength: "Jūsų slaptažodis turi būti ne trumpesnis kaip 10 simbolių."
+                              }
+                        },
+                        // Užtikriname, kad teisingai užpildytos formos informacija būtų nusiųsta pagal "action" atribute nurodytą informaciją:  
+                        submitHandler: function(form) {
+                          form.submit();
+                        }
+                    });
+            });
+        </script>
+    </head>
+    <body>
+        <div class="container">
+            <nav class="navbar navbar-expand-md navbar-dark" style="background-color: #51a293; padding-top: 0; padding-bottom: 0;">
+                <a class="navbar-brand" href="#" style="padding-top: 2px;">
+                    <img src="VectorAnimalSilhouette.jpg" width="30" height="30" alt="Logotipas">
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarToggler">
+                    <ul class="navbar-nav nav-pills mr-auto">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#" style="background-color: #bebf3d;">
+                                <i class="fa fa-home"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Apie mus</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Projektai</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Kontaktai</a>
+                        </li> 
+                    </ul>
+                    <ul class="navbar-nav nav-pills mr-0">
+                        <li class="nav-item">
+                            <a class="nav-link" id="log_in" href="#">
+                                <i class="fa fa-sign-in"></i>
+                                Prisijungti
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+        <div class="container">
+            <div class="page-header">    
+            </div>   
+        </div>
+        <div class="container">
+            <div class="row" id="main1">
+                <div class=" col-4 col-md-2 px-0 px-md-3 text-center">
+                    <ul style="list-style-type: none; padding-left: 0; margin-top: 16px;">
+                        <li>
+                            <a href="https://getbootstrap.com" target="_blank">Bootstrap 4</a>
+                        </li>
+                        <li>
+                            <a href="http://fontawesome.io" target="_blank">FA Icons</a>
+                        </li>
+                        <li>
+                            <a href="https://www.etsy.com/shop/RobManciniImages?ref=l2-shopheader-name" target="_blank">Etsy: Art</a>
+                        </li> 
+                    </ul>    
+                </div>
+                <div class="col-8 col-md-8">
+                    <h3>Atskleista, kodėl paukščiai migruoja išsidėstę V forma</h3>
+                    <p>
+                        Karališkojo veterinarijos koledžo Londone mokslininkai prie besimokančių migruoti paukščių pritaisė duomenų registravimo įtaisus. Tai padėjo atskleisti, jog šie paukščiai visuomet skrenda pačioje optimaliausioje pozicijoje – skrisdami arti priekyje esančio gyvūno sparno galo, jie pasinaudoja jo sukurta keliamąja oro srove. Tyrimas, neseniai pasirodęs žurnale „<a href="https://www.nature.com" target="_blank" style="text-decoration: underline;">Nature</a>“, taip pat atskleidė, jog paukščiai sparnais plaka tiksliai sureguliuotais intervalais.
+                    </p>
+                    <p>
+                        Taip elgdamiesi paukščiai efektyviausiai išnaudoja priekyje skrendančio giminaičio sukurtą keliamąją oro srovę, labiausiai juntamą ties sparnų galais. Tai leidžia iš paskos sekančiam paukščiui sutaupyti energijos ir paskraidyti „nemokamai“ savo paties sparno galą laikant šioje į viršų keliančioje oro srovėje. 
+                    </p>
+                </div>
+                <div class="col-md-2 d-none d-sm-block align-self-center">
+                    <a href="bird_picture_3.jpg" target="_blank">
+                        <img src="bird_picture_3.jpg" class="img-fluid rounded" alt="Grey Catbird watercolour"> 
+                        <!--Responsive image in Bootstrap 4-->
+                    </a>
+                </div>
+            </div>
+            <div class="row" id="main2">
+                <div class="col-4 col-md-2 px-0 px-md-3 text-center align-self-center">
+                    <p id="current_date"></p>
+                    <p style="margin-bottom: 0;">Temperatūra Vilniuje</p>
+                    <p id="temperature" style="font-size: 30px;">&#176;C</p>
+                </div>
+                <div class="col-8 col-md-8">
+                    <h3>
+                        Migruojantys paukščiai.
+                        <small class="text-muted">
+                            <span class="font-italic">Sylviidae</span>
+                            šeimos atstovai:
+                        </small>
+                    </h3>
+                    <ul style="list-style-type: square;">
+                        <li>devynbalsė</li>
+                        <li>krakšlė</li>
+                        <li>nendrinukė</li>
+                           <ol style="list-style-type: decimal;">
+                                <li>ežerinė nendrinukė</li>
+                                <li>karklinė nendrinukė</li>
+                                <li>meldinė nendrinukė</li>
+                                <li>sodinė nendrinukė</li>
+                            </ol>
+                        <li>nykštukas</li>
+                        <li>pečialinda</li>
+                        <li>tošinukė</li>
+                        <li>žiogelis</li>
+                    </ul>
+                </div>
+                <div class="col-md-2 d-none d-sm-block align-self-center">
+                    <a href="bird_picture_5.jpg" target="_blank">
+                        <img src="bird_picture_5.jpg" class="img-fluid rounded" alt="Pine Warbler watercolour">
+                        <!--Responsive image in Bootstrap 4-->
+                    </a>
+                </div>
+            </div>
+            <div class="row d-block d-sm-none" id="xs_only">
+                <div class="col-12 align-self-center">
+                    <img src="bird_picture_3.jpg" class="img-fluid rounded" alt="Grey Catbird watercolour"> 
+                    <img src="bird_picture_5.jpg" class="img-fluid rounded" alt="Pine Warbler watercolour">
+                    <!--Responsive image in Bootstrap 4-->
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row" id="slide">
+                <div class=" col-12 col-md-12 align-self-center">
+                    <ul class="list-inline" style="margin-bottom: 0;">
+                        <li class="list-inline-item"><i class="fa fa-user-o" style="color: #dcd7d4;"></i></li>
+                        <li class="list-inline-item">PRISIJUNGTI</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row align-self-center" id="form">
+                <div class="col-12 offset-0 col-md-6 offset-md-3">
+                    <form action="" name="log_in_form">
+                        <div class="row">
+                            <div class="col-4 col-md-4 text-right">
+                              <label for="firstname">Vardas</label>
+                            </div>
+                            <div class="col-8 col-md-8">
+                              <input type="text" name="firstname" id="firstname" placeholder=""><br>
+                            </div>
+                        </div>
+                        <div class="row d-block d-sm-none" id="xs_only_space">
+                        </div>
+                        <div class="row">
+                            <div class="col-4 col-md-4 text-right">
+                              <label for="email">El.paštas</label>
+                            </div>
+                            <div class="col-8 col-md-8">
+                              <input type="email" name="email" id="email" placeholder="">
+                            </div>
+                        </div>
+                        <div class="row d-block d-sm-none" id="xs_only_space">
+                        </div>
+                        <div class="row">
+                            <div class="col-4 col-md-4 text-right">
+                              <label for="password">Slaptažodis</label>
+                            </div>
+                            <div class="col-8 col-md-8">
+                              <input type="password" name="password" id="password" placeholder="">
+                            </div>
+                        </div>
+                        <div class="row d-block d-sm-none" id="xs_only_space">
+                        </div>
+                        <div class="row">
+                            <div class="col-8 offset-4 col-md-8 offset-md-4">
+                               <button type="submit">Prisijungti</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="row pr-0 pr-md-5" id="footer">
+                <div class="col-12 col-md-12"> 
+                    <p>&#9400; Copyright JP 17/1 Gina Andriuškevičiūtė</p>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript">
+            var currentDate = new Date();
+            var currentYear = currentDate.getFullYear();
+            var currentMonth = currentDate.getMonth()+1;
+            var currentDay = currentDate.getDate();
+            var allWeekdaysLT = ["sekmadienis", "pirmadienis", "antradienis", "trečiadienis", "ketvirtadienis", "penktadienis", "šeštadienis"];
+            var currentWeekday = allWeekdaysLT[currentDate.getDay()];
+   
+            document.getElementById("current_date").style.fontSize = "16px";
+            document.getElementById("current_date").style.color = "#51a293";
+            document.getElementById("current_date").innerHTML = currentYear + "-" + currentMonth + "-" + currentDay + "<br>" + currentWeekday;    
+        </script>
+    </body>
+</html>
